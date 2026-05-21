@@ -9,9 +9,8 @@ Lab Objectives
 - Integrate data sources into **Microsoft Sentinel**
 - Create and tune **analytics rules**
 - Perform threat hunting using **KQL (Kusto Query Language)**
-- Investigate incidents and 
+- Investigate incidents and utomate responses
 
-utomate responses
 - Build **playbooks** using Azure Logic Apps
 - Understand end-to-end SOC workflows in Azure
 
