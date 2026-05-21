@@ -1,7 +1,7 @@
 # Azure-Defender-and-Sentinel-2026
 SC-200 Home Lab
 This repository documents a hands-on home lab focused on **Microsoft Defender for Cloud Apps and Endpoint and 365 ** and **Microsoft Sentinel**, aligned with the **SC-200: Microsoft Security Operations Analyst** certification.
-The lab simulates real-world security operations scenarios, including threat detection, investigation, and response across a hybrid cloud environment.
+The lab simulates real-world security operations scenarios, including threat detection, investigation, and response across a hybrid cloud environment using a Raspberry Pi With Ubuntu Linux.
 
 Lab Objectives
 
