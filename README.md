@@ -1,120 +1,66 @@
 # Azure-Defender-and-Sentinel-2026
-SC-200 Home Lab
-What I Did 
-This lab was built to simulate a real SOC analyst workflow using Microsoft Defender for Cloud, Microsoft Sentinel, and multiple Azure virtual machines. The goal was to onboard machines, generate alerts, and understand how Defender XDR processes telemetry. The process was not perfect — and that’s exactly what made it realistic.
+# SC-200 Home Lab – Defender & Sentinel
 
-What I Successfully Completed
-Created three Azure VMs (Ubuntu + two Windows).
-Enabled Defender for Servers Plan 2 in Defender for Cloud.
-Connected a Log Analytics workspace and enabled Microsoft Sentinel.
-Installed the Azure Monitor Agent (AMA) using a Data Collection Rule.
-Verified Heartbeat logs flowing into Sentinel.
-Successfully generated and investigated an EICAR malware alert.
-Performed deep troubleshooting on Windows onboarding issues.
-Learned the difference between:
-Defender Antivirus
-Defender for Endpoint
-Full XDR onboarding
-AV‑only mode
-Captured screenshots of every step, including failures.
-What Worked Exactly as Expected
-Defender for Cloud onboarding
-AMA installation
-Heartbeat logs
-EICAR malware detection
-Ubuntu VM onboarding
-First Windows VM onboarding
-Sentinel workspace integration
-These components behaved normally and provided the expected telemetry.
- What Did NOT Work (And Why It Matters)
-The second Windows VM never fully onboarded into Defender for Endpoint (MDE).
-Symptoms included:
-VM never appeared in Defender XDR → Devices
-No alerts for:
-Failed logins
-Firewall disable
-Reconnaissance
-PowerShell activity
-Only EICAR alerts worked (AV telemetry only)
-SenseCncProxy.exe was missing from the system
-Onboarding package downloaded as GatewayWindowsDefenderATPOnboardingPackage
-Multiple MSI installs did not create the cloud connector
-What I Learned From the Failure
-This was the most valuable part of the lab.
-I learned that:
-A VM can have the Sense service running but still be in AV‑only mode.
-Defender AV ≠ Defender for Endpoint (full XDR).
-If the cloud connector is missing, the device will:
-Never register in Defender XDR
-Never send advanced telemetry
-Never generate behavioral alerts
-Some Azure VM images do not support full MDE onboarding.
-Troubleshooting onboarding is a real SOC skill:
-Checking services
-Checking registry keys
-Checking onboarding state
-Checking cloud connectivity
-Understanding why telemetry fails
+## 1. Lab Overview
 
-Troubleshooting the Windows VM Onboarding Failure
-This section documents the real‑world troubleshooting I performed when my second Windows VM failed to fully onboard into Microsoft Defender for Endpoint (MDE). This was the most valuable part of the lab because it required actual investigation, not just following a tutorial.
-Symptoms Observed
-The second Windows VM showed several clear signs of partial onboarding / AV‑only mode:
-VM did not appear under Defender XDR → Assets → Devices
-Only EICAR malware alerts worked
-No alerts for:
-Failed logins
-Firewall disable
-Reconnaissance
-PowerShell activity
-SenseCncProxy.exe was missing
-Onboarding package downloaded as GatewayWindowsDefenderATPOnboardingPackage
-Multiple MSI installs did not create the cloud connector
-These symptoms pointed to a deeper issue than a simple onboarding script failure.
-Verification Steps Performed
-Checked the Sense service
+This lab simulates a realistic SOC analyst workflow using:
+- Microsoft Defender for Cloud
+- Microsoft Sentinel
+- Multiple Azure virtual machines (Ubuntu + Windows)
 
-powershell
-sc.exe query sense
-Result: RUNNING  
-This confirmed the basic Defender service was installed.
-Checked passive mode
-powershell
-Get-MpPreference | Select ForceDefenderPassiveMode
-Result: False  
-This confirmed Defender AV was active and not overridden by another AV.
-Attempted to register the device
-powershell
-& "$env:ProgramFiles\Windows Defender\SenseCncProxy.exe" -register
-Result: CommandNotFoundException  
-This proved the cloud connector component was missing.
-Confirmed the VM never appeared in Devices
-The VM never registered in Defender XDR, even after multiple onboarding attempts.
-Root Cause Analysis
-Based on all evidence, the VM was stuck in AV‑only mode, meaning:
-Defender Antivirus was working
-But the full MDE platform (cloud connector + telemetry pipeline) was not installed
-Therefore, the VM could not:
-Register with Defender XDR
-Send advanced telemetry
-Generate behavioral alerts
-This is a known issue with certain Azure VM images that do not support full MDE onboarding, even when the Sense service is running.
-Why This Matters
-This troubleshooting experience taught me:
-Defender AV and Defender for Endpoint are not the same
-A device can look “healthy” but still be missing critical XDR components
-The onboarding package type matters
-VM image selection affects Defender onboarding
-Real SOC work involves diagnosing why telemetry is missing, not just generating alerts
-This failure became one of the most valuable parts of the lab because it reflects real‑world SOC engineering challenges.
+The goal was to onboard machines, generate alerts, and understand how Defender XDR processes telemetry. The lab is intentionally imperfect and includes a real onboarding failure that required troubleshooting.
 
-Final Outcome
-Even though the VM never fully onboarded, the troubleshooting process provided:
-A realistic investigation scenario
-Clear evidence of partial onboarding
-documented root cause
-Screenshots of errors and diagnostic commands
-A strong learning experience for my SOC portfolio
-This section demonstrates my ability to troubleshoot complex Defender onboarding issues — a skill that SOC analysts use every day.
+## 2. What I Did
+
+- Created three Azure VMs (Ubuntu + two Windows).
+- Enabled Defender for Servers Plan 2 in Defender for Cloud.
+- Connected a Log Analytics workspace and enabled Microsoft Sentinel.
+- Installed the Azure Monitor Agent (AMA) using a Data Collection Rule.
+- Verified Heartbeat logs flowing into Sentinel.
+- Generated and investigated an EICAR malware alert.
+- Troubleshot a Windows VM that failed to fully onboard into Defender for Endpoint.
+- Captured screenshots of both successful and failed states.
+
+## 3. What Worked
+
+- Defender for Cloud onboarding
+- AMA installation and Heartbeat logs
+- EICAR malware detection
+- Ubuntu VM onboarding
+- First Windows VM onboarding
+- Sentinel workspace integration
+
+## 4. What Didn’t Work (On Purpose)
+
+- Second Windows VM never fully onboarded into Defender for Endpoint (MDE).
+- VM did not appear in Defender XDR → Devices.
+- No alerts for failed logins, firewall disable, recon, or PowerShell activity.
+- `SenseCncProxy.exe` was missing.
+- Onboarding package was `GatewayWindowsDefenderATPOnboardingPackage`.
+- Multiple MSI installs did not create the cloud connector.
+
+## 5. What I Learned
+
+- A VM can have the `sense` service running but still be in AV-only mode.
+- Defender AV ≠ Defender for Endpoint (full XDR).
+- Missing cloud connector means no XDR device registration or advanced telemetry.
+- VM image choice affects Defender onboarding behavior.
+- Real SOC work includes diagnosing missing telemetry, not just generating alerts.
+
+## 6. Detailed Documentation
+
+- [Troubleshooting Guide](troubleshooting.md)
+- [Automated Response Playbook](playbook.md)
+- [Lab Architecture & Data Flow](architecture.md)
+
+## 7. Screenshots
+
+Screenshots are organized under the `screenshots/` folder:
+- Resource group and VMs
+- Defender for Cloud settings
+- Sentinel workspace and Heartbeat
+- EICAR alert
+- Broken Windows VM (onboarding failure)
+- AMA / DCR configuration
 
 
