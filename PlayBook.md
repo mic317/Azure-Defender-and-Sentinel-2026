@@ -1,9 +1,9 @@
 
 ---
 
-### 3️⃣ playbook.md — automated response playbook
+### playbook.md — automated response playbook
 
-Create `playbook.md` and paste:
+
 
 ```markdown
 # Automated Response Playbook – EICAR Malware Alert
@@ -102,8 +102,6 @@ This playbook demonstrates:
 - How automation can reduce response time.
 - How SOC workflows can be standardized.
 - How limitations (like partial onboarding) are handled and documented.
-
-Even in an imperfect lab, the logic of the playbook reflects real SOC practices.
 
 ---
 
